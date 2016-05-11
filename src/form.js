@@ -70,7 +70,7 @@ angular.module('angularPayments')
         var button = form.find('button');
         //button.prop('disabled', true);
 
-        if (attr.preSubmit) {
+        if (attr.preSubmit !== null) {
           scope[attr.preSubmit].apply(scope);
         }
 
