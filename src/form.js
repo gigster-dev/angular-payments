@@ -45,9 +45,18 @@ angular.module('angularPayments')
           throw 'stripeForm requires that you have stripe.js installed. Include https://js.stripe.com/v2/ into your html.';
       }
 
-      var form = angular.element(elem);
+      var form = angular.element(elem),
+        expMonthUsed,
+        expYearUsed,
+        exp,
+        isSubmitting = false;
 
       form.bind('submit', function() {
+        if (isSubmitting) {
+          return;
+        }
+
+        isSubmitting  = true;
 
         expMonthUsed = scope.expMonth ? true : false;
         expYearUsed = scope.expYear ? true : false;
@@ -64,6 +73,8 @@ angular.module('angularPayments')
         if(form.hasClass('ng-valid')) {
 
           $window.Stripe.createToken(_getDataToSend(scope), function() {
+            isSubmitting = false;
+
             var args = arguments;
             scope.$apply(function() {
               scope[attr.stripeForm].apply(scope, args);
@@ -72,6 +83,8 @@ angular.module('angularPayments')
           });
 
         } else {
+          isSubmitting = false;
+
           scope.$apply(function() {
             scope[attr.stripeForm].apply(scope, [400, {error: 'Invalid form submitted.'}]);
           });
@@ -80,7 +93,6 @@ angular.module('angularPayments')
 
         scope.expMonth = null;
         scope.expYear  = null;
-
       });
     }
   }
