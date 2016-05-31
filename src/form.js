@@ -41,9 +41,12 @@ angular.module('angularPayments')
     restrict: 'A',
     link: function(scope, elem, attr) {
 
+      // Disabling sanity check because we load the Stripe lib on demand. 
+      /*
       if(!$window.Stripe){
           throw 'stripeForm requires that you have stripe.js installed. Include https://js.stripe.com/v2/ into your html.';
       }
+      */
 
       var form = angular.element(elem),
         expMonthUsed,
